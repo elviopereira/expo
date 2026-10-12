@@ -40,6 +40,12 @@ inline jsi::Value valueFromFunction(jsi::IRuntime &runtime, const jsi::Function 
   return jsi::Value(runtime, function);
 }
 
+// Clones the function's handle into an object. The intermediate value is a C++ temporary, so its
+// rvalue `getObject` moves the handle on instead of cloning it a second time.
+inline jsi::Object objectFromFunction(jsi::IRuntime &runtime, const jsi::Function &function) {
+  return jsi::Value(runtime, function).getObject(runtime);
+}
+
 // `jsi::Object::setProperty` is a template function that Swift does not support. We need to provide specialized versions.
 // They take a `jsi::PropNameID` rather than a `const char *`: JSI treats a `const char *` name as ASCII,
 // which mangles non-ASCII property names coming from Swift strings.

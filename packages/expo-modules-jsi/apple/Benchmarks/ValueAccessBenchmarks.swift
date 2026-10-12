@@ -144,6 +144,30 @@ extension JSIBenchmarks {
   }
 
   @Test
+  func `object property to typed array`() async throws {
+    try await benchmarkCase { runtime in
+      let object = try runtime.eval("({ answer: new Uint8Array(8) })").getObject()
+      try benchmark("JavaScriptObject.getProperty(_:).getTypedArray()", runtime: runtime) { iterations in
+        for _ in 0..<iterations {
+          _ = object.getProperty("answer").getTypedArray()
+        }
+      }
+    }
+  }
+
+  @Test
+  func `function to object`() async throws {
+    try await benchmarkCase { runtime in
+      let function = try runtime.eval("(function answer() {})").getFunction()
+      try benchmark("JavaScriptFunction.asObject()", runtime: runtime) { iterations in
+        for _ in 0..<iterations {
+          _ = function.asObject()
+        }
+      }
+    }
+  }
+
+  @Test
   func `nested property traversal`() async throws {
     try await benchmarkCase { runtime in
       let object = try runtime.eval("({ a: { b: { c: { d: 42 } } } })").getObject()

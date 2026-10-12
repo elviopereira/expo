@@ -177,7 +177,7 @@ public struct JavaScriptFunction: JavaScriptType, ~Copyable {
     guard let jsiRuntime else {
       FatalError.runtimeLost()
     }
-    return JavaScriptObject(runtimeHandle, expo.valueFromFunction(jsiRuntime, pointee).getObject(jsiRuntime))
+    return JavaScriptObject(runtimeHandle, expo.objectFromFunction(jsiRuntime, pointee))
   }
 }
 
