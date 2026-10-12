@@ -92,6 +92,57 @@ extension JSIBenchmarks {
     }
   }
 
+  // The conversions below run on a temporary, so the engine value can be moved into the wrapper
+  // instead of cloned. Read them against `JavaScriptObject.getProperty(_:): object value` above.
+
+  @Test
+  func `object property to object`() async throws {
+    try await benchmarkCase { runtime in
+      let object = try runtime.eval("({ answer: { value: 42 } })").getObject()
+      try benchmark("JavaScriptObject.getProperty(_:).getObject()", runtime: runtime) { iterations in
+        for _ in 0..<iterations {
+          _ = object.getProperty("answer").getObject()
+        }
+      }
+    }
+  }
+
+  @Test
+  func `object property to array`() async throws {
+    try await benchmarkCase { runtime in
+      let object = try runtime.eval("({ answer: [1, 2, 3] })").getObject()
+      try benchmark("JavaScriptObject.getProperty(_:).getArray()", runtime: runtime) { iterations in
+        for _ in 0..<iterations {
+          _ = object.getProperty("answer").getArray()
+        }
+      }
+    }
+  }
+
+  @Test
+  func `object property to function`() async throws {
+    try await benchmarkCase { runtime in
+      let object = try runtime.eval("({ answer() {} })").getObject()
+      try benchmark("JavaScriptObject.getProperty(_:).getFunction()", runtime: runtime) { iterations in
+        for _ in 0..<iterations {
+          _ = object.getProperty("answer").getFunction()
+        }
+      }
+    }
+  }
+
+  @Test
+  func `object property to array buffer`() async throws {
+    try await benchmarkCase { runtime in
+      let object = try runtime.eval("({ answer: new ArrayBuffer(8) })").getObject()
+      try benchmark("JavaScriptObject.getProperty(_:).getArrayBuffer()", runtime: runtime) { iterations in
+        for _ in 0..<iterations {
+          _ = object.getProperty("answer").getArrayBuffer()
+        }
+      }
+    }
+  }
+
   @Test
   func `nested property traversal`() async throws {
     try await benchmarkCase { runtime in

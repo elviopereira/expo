@@ -99,6 +99,17 @@ inline jsi::Value takeValueFromArray(jsi::Array &array) noexcept {
   return jsi::Value(std::move(array));
 }
 
+// Clone a value's handle into a function or an array buffer. `value.getObject(runtime)` clones the
+// handle once, and the rvalue `getFunction` and `getArrayBuffer` move it on. Calling the two steps
+// from Swift clones it twice, since Swift only calls the `const&` overloads.
+inline jsi::Function functionFromValue(jsi::IRuntime &runtime, const jsi::Value &value) {
+  return value.getObject(runtime).getFunction(runtime);
+}
+
+inline jsi::ArrayBuffer arrayBufferFromValue(jsi::IRuntime &runtime, const jsi::Value &value) {
+  return value.getObject(runtime).getArrayBuffer(runtime);
+}
+
 inline const jsi::Value valueFromError(jsi::IRuntime &runtime, const jsi::JSError &error) {
   return jsi::Value(runtime, error.value());
 }

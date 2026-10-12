@@ -382,7 +382,7 @@ public struct JavaScriptValue: JavaScriptType, Sendable, ~Copyable {
     }
     assert(isFunction(), "Value is not a function")
     assert(runtime.isOnOwningThread(), "A JavaScript value was copied off its runtime's JavaScript thread")
-    return JavaScriptFunction(runtime, pointee.getObject(runtime.pointee).getFunction(runtime.pointee))
+    return JavaScriptFunction(runtime, expo.functionFromValue(runtime.pointee, pointee))
   }
 
   /// Returns the value as a typed array, or asserts if it is not a typed array.
@@ -401,7 +401,7 @@ public struct JavaScriptValue: JavaScriptType, Sendable, ~Copyable {
     }
     assert(isArrayBuffer(), "Value is not an array buffer")
     assert(runtime.isOnOwningThread(), "A JavaScript value was copied off its runtime's JavaScript thread")
-    return JavaScriptArrayBuffer(runtime, pointee.getObject(runtime.pointee).getArrayBuffer(runtime.pointee))
+    return JavaScriptArrayBuffer(runtime, expo.arrayBufferFromValue(runtime.pointee, pointee))
   }
 
   /// Returns the value as a promise, or asserts if it is not a promise.
