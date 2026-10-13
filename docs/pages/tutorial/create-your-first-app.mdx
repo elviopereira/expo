@@ -1,4 +1,20 @@
----
+--{
+  "expo": {
+    "name": "Lore Asistente",
+    "slug": "lore-tareas",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "android": {
+      "package": "com.lore.asistente",
+      "permissions": ["POST_NOTIFICATIONS", "RECEIVE_BOOT_COMPLETED", "VIBRATE"]
+    },
+    "plugins": [
+      ["expo-notifications", { "defaultChannel": "lore-reminders" }]
+    ]
+  }
+}
+
 title: Create your first app
 description: In this chapter, learn how to create a new Expo project.
 hasVideoLink: true
